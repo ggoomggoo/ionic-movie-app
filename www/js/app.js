@@ -7,17 +7,26 @@ angular.module('mymovies', ['ionic'])
 
 .controller('MovieCtrl', function($scope, $http) {
   $scope.movies = [];
+  var lastIdx = 0;
 
-  // CORS
-  // ionic.config.json -> proxies
-  // $http.get('http://52.78.168.126:8080/api/movie/list/0')
-  $http.get('/api/movie/list/0')
-    .success(function(response) {
-      angular.forEach(response.movieList, function(data) {
-        console.log(data);
-        $scope.movies.push(data);
+  $scope.loadMore = function() {
+    if ($scope.movies.length > 0) {
+      lastIdx = $scope.movies[$scope.movies.length-1].idx;
+    }
+
+    // 최초에 loadMore() 실행됨. so 통신이 중복되지 않도록 함수 안으로 이동
+    // CORS
+    // ionic.config.json -> proxies
+    // $http.get('http://52.78.168.126:8080/api/movie/list/0')
+
+    $http.get('/api/movie/list/' + lastIdx)
+      .success(function(response) {
+        angular.forEach(response.movieList, function(data) {
+          $scope.movies.push(data);
+          $scope.$broadcast('scroll.infiniteScrollComplete');
+        });
       });
-    });
+  };
 
 })
 

@@ -35,16 +35,20 @@
   <body ng-app="mymovies" ng-controller="MovieCtrl">
 
     <ion-pane>
-      <ion-header-bar class="bar-stable">
+      <ion-header-bar class="bar-positive">
         <h1 class="title">My Movies</h1>
       </ion-header-bar>
       <ion-content>
         <div class="list">
-          <div ng-repeat="movie in movies">
+          <div class="item" ng-repeat="movie in movies">
             <h2>{{movie.title}}</h2>
           </div>
         </div>
       </ion-content>
+      <ion-infinite-scroll
+        on-infinite="loadMore()"
+        distance="1%">
+      </ion-infinite-scroll>
     </ion-pane>
   </body>
 </html>
