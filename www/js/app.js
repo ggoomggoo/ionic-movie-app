@@ -14,6 +14,24 @@ angular.module('mymovies', ['ionic'])
     if ($scope.movies.length > 0) {
       lastIdx = $scope.movies[$scope.movies.length-1].idx;
     }
+    loadList(lastIdx, function(moreData) {
+      $scope.movies = $scope.movies.concat(moreData);
+      $scope.$broadcast('scroll.infiniteScrollComplete');
+    });
+  };
+
+  $scope.doRefresh = function() {
+    lastIdx = 0;
+    $scope.moreDataCanBeLoaded = true;
+
+    loadList(lastIdx, function(newData) {
+      $scope.movies = newData;
+      // Stop the ion-refresher from spinning
+      $scope.$broadcast('scroll.refreshComplete');
+    });
+  };
+
+  function loadList(lastIdx, callback) {
 
     // 최초에 loadMore() 실행됨. so 통신이 중복되지 않도록 함수 안으로 이동
     // CORS
@@ -27,10 +45,10 @@ angular.module('mymovies', ['ionic'])
         }
         angular.forEach(response.movieList, function(data) {
           $scope.movies.push(data);
-          $scope.$broadcast('scroll.infiniteScrollComplete');
         });
+        callback();
       });
-  };
+  }
 
 })
 
