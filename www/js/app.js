@@ -8,6 +8,7 @@ angular.module('mymovies', ['ionic'])
 .controller('MovieCtrl', function($scope, $http) {
   $scope.movies = [];
   var lastIdx = 0;
+  $scope.moreDataCanBeLoaded = true;
 
   $scope.loadMore = function() {
     if ($scope.movies.length > 0) {
@@ -21,6 +22,9 @@ angular.module('mymovies', ['ionic'])
 
     $http.get('/api/movie/list/' + lastIdx)
       .success(function(response) {
+        if (response.movieList === 0) {
+          $scope.moreDataCanBeLoaded = false;
+        }
         angular.forEach(response.movieList, function(data) {
           $scope.movies.push(data);
           $scope.$broadcast('scroll.infiniteScrollComplete');

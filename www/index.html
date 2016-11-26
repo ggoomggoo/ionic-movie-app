@@ -44,11 +44,12 @@
             <h2>{{movie.title}}</h2>
           </div>
         </div>
+        <ion-infinite-scroll
+          on-inf="moreDataCanBeLoaded"
+          on-infinite="loadMore()"
+          distance="1%">
+        </ion-infinite-scroll>
       </ion-content>
-      <ion-infinite-scroll
-        on-infinite="loadMore()"
-        distance="1%">
-      </ion-infinite-scroll>
     </ion-pane>
   </body>
 </html>
