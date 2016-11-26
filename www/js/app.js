@@ -3,7 +3,23 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic'])
+angular.module('mymovies', ['ionic'])
+
+.controller('MovieCtrl', function($scope, $http) {
+  $scope.movies = [];
+
+  // CORS
+  // ionic.config.json -> proxies
+  // $http.get('http://52.78.168.126:8080/api/movie/list/0')
+  $http.get('/api/movie/list/0')
+    .success(function(response) {
+      angular.forEach(response.movieList, function(data) {
+        console.log(data);
+        $scope.movies.push(data);
+      });
+    });
+
+})
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
